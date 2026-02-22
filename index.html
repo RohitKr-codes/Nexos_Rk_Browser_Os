@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NexOS — Browser Operating System</title>
+
+  <!-- CSS is in css/style.css -->
+  <link rel="stylesheet" href="css/style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@300;400;600&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- BOOT SCREEN -->
+<div id="boot-screen">
+  <div class="boot-logo">
+    <div class="boot-hex-ring"></div>
+    <div class="boot-hex-ring r2"></div>
+    <div class="boot-hex-ring r3"></div>
+    <div class="boot-center-dot"></div>
+    <div class="boot-brand">NexOS</div>
+    <div class="boot-sub">Digital Life Operating System</div>
+  </div>
+  <div class="boot-progress-wrap">
+    <div class="boot-progress-bar" id="boot-bar"></div>
+  </div>
+  <div class="boot-log" id="boot-log"></div>
+</div>
+
+<!-- LOCK SCREEN -->
+<div id="lock-screen" class="hidden">
+  <div class="lock-bg-particles" id="lock-particles"></div>
+  <div class="lock-card">
+    <div class="lock-avatar">
+      <div class="lock-avatar-ring"></div>
+      <span class="lock-avatar-icon">👤</span>
+    </div>
+    <div class="lock-user">NexOS User</div>
+    <div class="lock-time" id="lock-time"></div>
+    <div class="lock-date" id="lock-date"></div>
+    <div class="lock-hint">Click anywhere to unlock</div>
+  </div>
+</div>
+
+<!-- DESKTOP -->
+<div id="desktop" class="hidden">
+
+  <canvas id="wallpaper-canvas"></canvas>
+
+  <!-- Desktop Icons -->
+  <div class="desktop-icons">
+    <div class="desk-icon" data-app="notes">
+      <div class="desk-icon-img">📝</div><span>Notes</span>
+    </div>
+    <div class="desk-icon" data-app="tasks">
+      <div class="desk-icon-img">✅</div><span>Tasks</span>
+    </div>
+    <div class="desk-icon" data-app="files">
+      <div class="desk-icon-img">📁</div><span>Files</span>
+    </div>
+    <div class="desk-icon" data-app="settings">
+      <div class="desk-icon-img">⚙️</div><span>Settings</span>
+    </div>
+    <div class="desk-icon" data-app="calculator">
+      <div class="desk-icon-img">🔢</div><span>Calculator</span>
+    </div>
+    <div class="desk-icon" data-app="terminal">
+      <div class="desk-icon-img">💻</div><span>Terminal</span>
+    </div>
+    <div class="desk-icon" data-app="clock">
+      <div class="desk-icon-img">🕐</div><span>Clock</span>
+    </div>
+    <div class="desk-icon" data-app="analytics">
+      <div class="desk-icon-img">📊</div><span>Analytics</span>
+    </div>
+  </div>
+
+  <!-- Widgets -->
+  <div class="widget widget-clock" id="widget-clock">
+    <div class="widget-time" id="w-time"></div>
+    <div class="widget-date-mini" id="w-date"></div>
+  </div>
+  <div class="widget widget-weather">
+    <div class="widget-weather-icon">🌤️</div>
+    <div class="widget-weather-info">
+      <div class="widget-weather-temp">28°C</div>
+      <div class="widget-weather-loc">Partly Cloudy</div>
+    </div>
+  </div>
+
+  <!-- Window Container -->
+  <div id="window-container"></div>
+
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div class="taskbar-left">
+      <button class="taskbar-start-btn" id="start-btn">
+        <div class="nexos-logo-mini">⬡</div>
+        <span>NexOS</span>
+      </button>
+    </div>
+    <div class="taskbar-center" id="taskbar-apps"></div>
+    <div class="taskbar-right">
+      <div class="taskbar-systray">
+        <span class="tray-icon">📶</span>
+        <span class="tray-icon">🔋</span>
+        <span class="tray-icon">🔊</span>
+      </div>
+      <div class="taskbar-clock" id="taskbar-clock"></div>
+    </div>
+  </div>
+
+  <!-- Start Menu -->
+  <div class="start-menu hidden" id="start-menu">
+    <div class="start-menu-header">
+      <div class="start-search-wrap">
+        <span>🔍</span>
+        <input type="text" placeholder="Search apps..." id="start-search" />
+      </div>
+    </div>
+    <div class="start-apps-grid">
+      <div class="start-app-item" data-app="notes"><span>📝</span><p>Notes</p></div>
+      <div class="start-app-item" data-app="tasks"><span>✅</span><p>Tasks</p></div>
+      <div class="start-app-item" data-app="files"><span>📁</span><p>Files</p></div>
+      <div class="start-app-item" data-app="settings"><span>⚙️</span><p>Settings</p></div>
+      <div class="start-app-item" data-app="calculator"><span>🔢</span><p>Calculator</p></div>
+      <div class="start-app-item" data-app="terminal"><span>💻</span><p>Terminal</p></div>
+      <div class="start-app-item" data-app="clock"><span>🕐</span><p>Clock</p></div>
+      <div class="start-app-item" data-app="analytics"><span>📊</span><p>Analytics</p></div>
+    </div>
+    <div class="start-menu-footer">
+      <button class="start-footer-btn" id="btn-lock">🔒 Lock</button>
+      <button class="start-footer-btn" id="btn-shutdown">⏻ Shut Down</button>
+    </div>
+  </div>
+
+  <!-- Right-click Context Menu -->
+  <div class="context-menu hidden" id="context-menu">
+    <div class="ctx-item" id="ctx-wallpaper">🎨 Change Wallpaper</div>
+    <div class="ctx-item" id="ctx-settings">⚙️ Settings</div>
+    <div class="ctx-separator"></div>
+    <div class="ctx-item" id="ctx-refresh">🔄 Refresh</div>
+    <div class="ctx-item" id="ctx-about">ℹ️ About NexOS</div>
+  </div>
+
+  <!-- Notifications -->
+  <div id="notification-center"></div>
+
+  <!-- About Modal -->
+  <div class="modal-overlay hidden" id="about-modal">
+    <div class="about-card">
+      <div class="about-logo">⬡</div>
+      <h2>NexOS</h2>
+      <p>Digital Life Operating System</p>
+      <p class="about-version">Version 1.0.0 | Built with Vanilla JS</p>
+      <p class="about-desc">Browser-based OS with drag & resize windows, 8 apps, virtual file system, animated wallpapers, themes, and persistent storage.</p>
+      <button id="about-close">Close</button>
+    </div>
+  </div>
+
+</div><!-- /desktop -->
+
+<!-- ════════════════════════════════════
+     SCRIPTS — ORDER MATTERS
+     core → apps → os.js (last)
+════════════════════════════════════ -->
+<script src="core/storage.js"></script>
+<script src="core/windowManager.js"></script>
+<script src="core/appLauncher.js"></script>
+<script src="apps/notes.js"></script>
+<script src="apps/tasks.js"></script>
+<script src="apps/files.js"></script>
+<script src="apps/settings.js"></script>
+<script src="apps/analytics.js"></script>
+<script src="apps/terminal.js"></script>
+<script src="apps/calculator.js"></script>
+<script src="apps/clock.js"></script>
+<!-- os.js is in js/ folder -->
+<script src="js/os.js"></script>
+
+</body>
+</html>
